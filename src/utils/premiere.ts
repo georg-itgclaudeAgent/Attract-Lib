@@ -101,6 +101,36 @@ export async function importAndInsertAtPlayhead(
   });
 }
 
+/**
+ * Save audio to a temp file, import into project for preview in Source Monitor.
+ * Does NOT add to timeline — just makes it available in the project panel.
+ */
+export async function previewAudioInPremiere(
+  audioData: ArrayBuffer
+): Promise<void> {
+  const fs = require("fs");
+  const project = await premierepro.Project.getActiveProject();
+
+  // Save to plugin temp directory
+  const timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+  const filename = `attract-lib-preview-${timestamp}.mp3`;
+  const tempPath = `plugin-temp:/${filename}`;
+
+  const uint8 = new Uint8Array(audioData);
+  await fs.writeFile(tempPath, uint8);
+
+  // Get the native path for import
+  const { localFileSystem } = uxp.storage;
+  const tempEntry = await localFileSystem.getEntryWithUrl(tempPath);
+  const nativePath = (tempEntry as any).nativePath;
+
+  // Import into project
+  const imported = await project.importFiles([nativePath], true, null, false);
+  if (!imported) {
+    throw new Error("Failed to import preview audio into project.");
+  }
+}
+
 export async function pickOutputDirectory(): Promise<{
   path: string;
   token: string;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { AppSettings, Voice, DEFAULT_VOICE_SETTINGS } from "../types";
 import { listClonedVoices, generateSpeech } from "../api/elevenlabs";
-import { saveAudioFile, importAndInsertAtPlayhead } from "../utils/premiere";
+import { saveAudioFile, importAndInsertAtPlayhead, previewAudioInPremiere } from "../utils/premiere";
 import { useAudioPlayer } from "../hooks/useAudioPlayer";
 import { VoiceSelector } from "./VoiceSelector";
 import { VoiceSettings } from "./VoiceSettings";
@@ -25,9 +25,10 @@ export const MainPanel: React.FC<MainPanelProps> = ({
   const [generating, setGenerating] = useState(false);
   const [audioData, setAudioData] = useState<ArrayBuffer | null>(null);
   const [addingToTimeline, setAddingToTimeline] = useState(false);
+  const [previewing, setPreviewing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { audioSize, blobUrl, loadAudio, cleanup } = useAudioPlayer();
+  const { audioSize, loadAudio, cleanup } = useAudioPlayer();
 
   useEffect(() => {
     const fetchVoices = async () => {
@@ -96,6 +97,18 @@ export const MainPanel: React.FC<MainPanelProps> = ({
     setAddingToTimeline(false);
   }, [audioData, settings.outputDirectoryToken, cleanup]);
 
+  const handlePreview = useCallback(async () => {
+    if (!audioData) return;
+    setPreviewing(true);
+    setError(null);
+    try {
+      await previewAudioInPremiere(audioData);
+    } catch (err: any) {
+      setError(err.message || "Failed to preview audio.");
+    }
+    setPreviewing(false);
+  }, [audioData]);
+
   const handleRegenerate = useCallback(() => {
     cleanup();
     setAudioData(null);
@@ -138,9 +151,10 @@ export const MainPanel: React.FC<MainPanelProps> = ({
       {audioData && (
         <AudioPreview
           audioSize={audioSize}
-          blobUrl={blobUrl}
+          onPreview={handlePreview}
           onAddToTimeline={handleAddToTimeline}
           onRegenerate={handleRegenerate}
+          previewing={previewing}
           addingToTimeline={addingToTimeline}
         />
       )}

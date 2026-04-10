@@ -2,17 +2,19 @@ import React from "react";
 
 interface AudioPreviewProps {
   audioSize: number;
-  blobUrl: string | null;
+  onPreview: () => void;
   onAddToTimeline: () => void;
   onRegenerate: () => void;
+  previewing: boolean;
   addingToTimeline: boolean;
 }
 
 export const AudioPreview: React.FC<AudioPreviewProps> = ({
   audioSize,
-  blobUrl,
+  onPreview,
   onAddToTimeline,
   onRegenerate,
+  previewing,
   addingToTimeline,
 }) => {
   const formatSize = (bytes: number): string => {
@@ -30,9 +32,14 @@ export const AudioPreview: React.FC<AudioPreviewProps> = ({
         <span>Audio generated ({formatSize(audioSize)})</span>
       </div>
 
-      {blobUrl && (
-        <audio controls src={blobUrl} style={{ width: "100%", height: "32px" }} />
-      )}
+      <button
+        className="btn-secondary"
+        onClick={onPreview}
+        disabled={previewing}
+        style={{ width: "100%" }}
+      >
+        {previewing ? "Importing..." : "▶ Preview in Premiere"}
+      </button>
 
       <div className="audio-actions">
         <button
