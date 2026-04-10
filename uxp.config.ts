@@ -57,6 +57,7 @@ const manifest: UXP_Manifest = {
     network: {
       domains: [
         `ws://localhost:${extraPrefs.hotReloadPort}`,
+        "https://api.elevenlabs.io",
       ],
     },
     clipboard: "readAndWrite",
