@@ -27,8 +27,7 @@ export const MainPanel: React.FC<MainPanelProps> = ({
   const [addingToTimeline, setAddingToTimeline] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { isPlaying, progress, duration, loadAudio, togglePlayPause, cleanup } =
-    useAudioPlayer();
+  const { audioSize, loadAudio, cleanup } = useAudioPlayer();
 
   useEffect(() => {
     const fetchVoices = async () => {
@@ -138,10 +137,7 @@ export const MainPanel: React.FC<MainPanelProps> = ({
 
       {audioData && (
         <AudioPreview
-          isPlaying={isPlaying}
-          progress={progress}
-          duration={duration}
-          onTogglePlay={togglePlayPause}
+          audioSize={audioSize}
           onAddToTimeline={handleAddToTimeline}
           onRegenerate={handleRegenerate}
           addingToTimeline={addingToTimeline}

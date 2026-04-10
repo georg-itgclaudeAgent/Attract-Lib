@@ -1,45 +1,31 @@
 import React from "react";
 
 interface AudioPreviewProps {
-  isPlaying: boolean;
-  progress: number;
-  duration: number;
-  onTogglePlay: () => void;
+  audioSize: number;
   onAddToTimeline: () => void;
   onRegenerate: () => void;
   addingToTimeline: boolean;
 }
 
 export const AudioPreview: React.FC<AudioPreviewProps> = ({
-  isPlaying,
-  progress,
-  duration,
-  onTogglePlay,
+  audioSize,
   onAddToTimeline,
   onRegenerate,
   addingToTimeline,
 }) => {
-  const formatTime = (seconds: number): string => {
-    const m = Math.floor(seconds / 60);
-    const s = Math.floor(seconds % 60);
-    return `${m}:${s.toString().padStart(2, "0")}`;
+  const formatSize = (bytes: number): string => {
+    if (bytes < 1024) return `${bytes} B`;
+    const kb = bytes / 1024;
+    if (kb < 1024) return `${kb.toFixed(1)} KB`;
+    const mb = kb / 1024;
+    return `${mb.toFixed(1)} MB`;
   };
 
   return (
     <div className="audio-preview">
-      <div className="audio-player">
-        <button className="btn-play" onClick={onTogglePlay}>
-          {isPlaying ? "⏸" : "▶"}
-        </button>
-        <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{ width: `${progress * 100}%` }}
-          />
-        </div>
-        <span className="audio-time">
-          {formatTime(progress * duration)} / {formatTime(duration)}
-        </span>
+      <div className="audio-ready">
+        <span className="audio-ready-icon">✓</span>
+        <span>Audio generated ({formatSize(audioSize)})</span>
       </div>
 
       <div className="audio-actions">
