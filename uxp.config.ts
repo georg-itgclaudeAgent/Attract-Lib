@@ -55,10 +55,7 @@ const manifest: UXP_Manifest = {
   requiredPermissions: {
     localFileSystem: "fullAccess",
     network: {
-      domains: [
-        `ws://localhost:${extraPrefs.hotReloadPort}`,
-        "https://api.elevenlabs.io",
-      ],
+      domains: "all",
     },
     clipboard: "readAndWrite",
     allowCodeGenerationFromStrings: true,
