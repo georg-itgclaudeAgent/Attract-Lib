@@ -1,4 +1,5 @@
 node_modules/
 dist/
+ccx/
 *.ccx
 .DS_Store
