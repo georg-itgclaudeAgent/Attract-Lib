@@ -1,0 +1,28 @@
+{
+  "name": "attract-lib",
+  "version": "1.0.0",
+  "description": "Attract Lib — Premiere Pro UXP Extension",
+  "scripts": {
+    "dev": "cross-env MODE=dev vite build --watch",
+    "build": "cross-env MODE=build vite build",
+    "ccx": "cross-env MODE=package vite build",
+    "zip": "cross-env MODE=zip vite build",
+    "serve": "npx serve dist",
+    "connect": "cross-env BOLT_ACTION=connect vite",
+    "disconnect": "cross-env BOLT_ACTION=disconnect vite",
+    "ccx-install": "cross-env BOLT_ACTION=install vite",
+    "ccx-uninstall": "cross-env BOLT_ACTION=uninstall vite"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.5.1",
+    "cross-env": "^7.0.3",
+    "sass": "^1.69.5",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-uxp-plugin": "^1.2.5"
+  }
+}
