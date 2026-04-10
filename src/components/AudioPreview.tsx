@@ -2,6 +2,7 @@ import React from "react";
 
 interface AudioPreviewProps {
   audioSize: number;
+  blobUrl: string | null;
   onAddToTimeline: () => void;
   onRegenerate: () => void;
   addingToTimeline: boolean;
@@ -9,6 +10,7 @@ interface AudioPreviewProps {
 
 export const AudioPreview: React.FC<AudioPreviewProps> = ({
   audioSize,
+  blobUrl,
   onAddToTimeline,
   onRegenerate,
   addingToTimeline,
@@ -27,6 +29,10 @@ export const AudioPreview: React.FC<AudioPreviewProps> = ({
         <span className="audio-ready-icon">✓</span>
         <span>Audio generated ({formatSize(audioSize)})</span>
       </div>
+
+      {blobUrl && (
+        <audio controls src={blobUrl} style={{ width: "100%", height: "32px" }} />
+      )}
 
       <div className="audio-actions">
         <button
